@@ -4,5 +4,5 @@
 
 
 body{
-  @apply bg-purpleGalaxy bg-cover bg-no-repeat h-screen
+  @apply bg-[#141412] bg-purpleGalaxy bg-cover bg-no-repeat h-screen
 }
