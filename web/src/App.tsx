@@ -1,12 +1,37 @@
 import './styles/main.css'
 import Logo from './assets/Logo.svg'
-import { MagnifyingGlassPlus } from 'phosphor-react'
+import { GameController, MagnifyingGlassPlus } from 'phosphor-react'
+import { GameBanner } from './components/GameBanner'
+import { InviteBanner } from './components/InviteBanner'
+import { useEffect, useState } from 'react'
+import * as Dialog from '@radix-ui/react-dialog'
+
+
+
+interface Game {
+  id: string
+  title: string
+  bannerUrl: string
+  _count: {
+    Ads: number
+  }
+}
 
 function App() {
 
+  const [games, setGames] = useState<Game[]>([])
+
+  useEffect(() => {
+    fetch('http://localhost:3777/games')
+      .then(res => res.json())
+      .then(data => {
+        setGames(data)
+      })
+  }, [])
+
   return (
     <main className={`
-       max-w-[1344px] mx-auto my-28
+       max-w-[1344px] mx-auto my-28 pb-20
        flex items-center justify-center flex-col
        `}>
       <header className='flex flex-col gap-8'>
@@ -26,72 +51,80 @@ function App() {
       </header>
 
       <div className='grid grid-cols-6 gap-6 mt-16'>
-        <a className='relative rounded-lg overflow-hidden' href='/'>
-          <img src='./image 1.png'></img>
 
-          <div className='w-full pt-16 pb-4 px-4 bg-backName absolute right-0 left-0 bottom-0'>
-            <strong className='text-zinc-50 block'>League of Legends</strong>
-            <span className='text-zinc-100 block'>4 anúncios</span>
-          </div>
-        </a>
-        <a className='relative rounded-lg overflow-hidden' href='/'>
-          <img src='./image 2.png'></img>
+        {games.map(game => {
+          return (
+            <GameBanner key={game.id}
+              image={game.bannerUrl}
+              name={game.title}
+              adsCount={game._count.Ads}
+            ></GameBanner>
+          )
+        })}
 
-          <div className='w-full pt-16 pb-4 px-4 bg-backName absolute right-0 left-0 bottom-0'>
-            <strong className='text-zinc-50 block'>League of Legends</strong>
-            <span className='text-zinc-100 block'>4 anúncios</span>
-          </div>
-        </a>
-        <a className='relative rounded-lg overflow-hidden' href='/'>
-          <img src='./image 3.png'></img>
-
-          <div className='w-full pt-16 pb-4 px-4 bg-backName absolute right-0 left-0 bottom-0'>
-            <strong className='text-zinc-50 block'>League of Legends</strong>
-            <span className='text-zinc-100 block'>4 anúncios</span>
-          </div>
-        </a>
-        <a className='relative rounded-lg overflow-hidden' href='/'>
-          <img src='./image 7.png'></img>
-
-          <div className='w-full pt-16 pb-4 px-4 bg-backName absolute right-0 left-0 bottom-0'>
-            <strong className='text-zinc-50 block'>League of Legends</strong>
-            <span className='text-zinc-100 block'>4 anúncios</span>
-          </div>
-        </a>
-        <a className='relative rounded-lg overflow-hidden' href='/'>
-          <img src='./image 5.png'></img>
-
-          <div className='w-full pt-16 pb-4 px-4 bg-backName absolute right-0 left-0 bottom-0'>
-            <strong className='text-zinc-50 block'>League of Legends</strong>
-            <span className='text-zinc-100 block'>4 anúncios</span>
-          </div>
-        </a>
-        <a className='relative rounded-lg overflow-hidden' href='/'>
-          <img src='./image 6.png'></img>
-
-          <div className='w-full pt-16 pb-4 px-4 bg-backName absolute right-0 left-0 bottom-0'>
-            <strong className='text-zinc-50 block'>League of Legends</strong>
-            <span className='text-zinc-100 block'>4 anúncios</span>
-          </div>
-        </a>
       </div>
+      <Dialog.Root>
+        <InviteBanner />
 
-      <div className={` mt-8 self-stretch rounded-lg 
-      border-t-8 bg-gradient-to-r from-purple-500 via-green-400 to-yellow-500
-      bg-clip-border border-transparent`}>
-        <div className=' w-full bg-[#2A2634] px-8 py-6 flex  text-zinc-100 justify-between'>
-          <div className='flex flex-col'>
-            <strong className='text-2xl'>Não encontrou seu duo?</strong>
-            <span>Publique um anúncio para encontrar novos players!</span>
-          </div>
+        <Dialog.Portal>
+          <Dialog.Overlay className='bg-purple-500/10 inset-0 fixed' />
 
-          <button className='bg-violet-500 hover:bg-violet-600 py-3 px-4 flex items-center gap-2 rounded-lg'>
-           <MagnifyingGlassPlus size={24}></MagnifyingGlassPlus>
-           Publicar anúncio
-          </button>
+          <Dialog.Content className='fixed bg-[#2A2634] py-8 px-10 text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg w-[480px] shadow-xl'>
+            <Dialog.Title className='text-2xl font-black'>Publique um anúncio</Dialog.Title>
 
-        </div>
-      </div>
+            <Dialog.Content>
+              <form>
+                <div>
+                  <label htmlFor='game'>Qual o game?</label>
+                  <input type={"text"} id='game' placeholder='Selecione o que você quer jogar' />
+                </div>
+
+                <div>
+                  <label htmlFor='name'>Seu nome (ou nickname)</label>
+                  <input id='name' placeholder='Como te chaman no game?' type="text" />
+                </div>
+
+                <div>
+                  <div>
+                    <label htmlFor='yearsPlaying'>Há quantos anos você joga?</label>
+                    <input type={"number"} id="yearsPlaying" placeholder='Tudo bem ser ZERO' />
+                  </div>
+                  <div>
+                    <label htmlFor='discord'>Qual seu discord?</label>
+                    <input id="discord" type={"text"} placeholder='Usuario(a)#0000' />
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    <label htmlFor='hourStart'>Quando você começa a jogar?</label>
+                    <input type={"number"} id="yearsPlaying" placeholder='de' />
+                  </div>
+                  <div>
+                    <label htmlFor='hoursEnd'>Quando você para de jogar?</label>
+                    <input id="hoursEnd" type={"number"} placeholder='até' />
+                  </div>
+                </div>
+
+                <div>
+                  <input type={"checkbox"} />
+                  Costumo me conectar ao chat de voz
+                </div>
+
+                <footer>
+                  <button>Cancelar</button>
+                  <button type='submit'>
+                    <GameController />
+                    Encontrar duo
+                  </button>
+                </footer>
+
+              </form>
+            </Dialog.Content>
+
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
 
     </main>
   )
