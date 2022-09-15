@@ -1,28 +1,102 @@
 import  express  from "express";
+import cors from 'cors'
+import { PrismaClient } from "@prisma/client";
 
 const app = express()
+const prisma = new PrismaClient()
 
-app.get('/games/:id/ads',(req, res) => {
+app.use(express.json())
+app.use(cors())
 
-  const gamesId = req.params
 
 
-  return res.json([
-    {nome: 'bobo'},
-    {nome: 'jaqueline'},
-    {nome: 'dedei'},
-    {nome: 'marr'}
-  ])
+app.get('/games', async (req, res) =>{
+  const games = await prisma.game.findMany({
+    include:{
+      _count:{
+        select:{
+          Ads: true
+        }
+      }
+    }
+  })
+
+  return res.json(games)
 })
 
-app.get('/ads/:id/discord',(req, res) => {
 
-  const adId = req.params
+app.post('/games/:id/ads',async (req, res) =>{
+
+  const gameId = req.params.id
+  const body: any = req.body
+
+  const ad = await prisma.ad.create({
+    data:{
+      gameId,
+      name: body.name,
+      yearsPlaying: body.yearsPlaying,
+      discord: body.discord,
+      weekDays: body.weekDays,
+      hourStart: body.hourStart,
+      hoursEnd: body.hoursEnd,
+      useVoiceChannel: body.useVoiceChannel,
+      id: body.id
+    }
+  })
 
 
-  return res.json([
-    
-  ])
+  return res.status(201).json(ad)
+})
+
+
+app.get('/games/:id/ads',async (req, res) => {
+
+  const gamesId = req.params.id
+
+  const ads = await prisma.ad.findMany({
+    select:{
+      name: true,
+      id: true,
+      weekDays: true,
+      hourStart: true,
+      hoursEnd: true,
+      yearsPlaying: true,
+      useVoiceChannel: true
+    },
+    where:{
+      gameId: gamesId
+    },
+    orderBy:{
+      createdAt: 'desc'
+    }
+  })
+
+
+  return res.json(ads.map( ad => {
+    return {
+      ...ad,
+      weekDays: ad.weekDays.split(',')
+    }
+  }))
+})
+
+app.get('/ads/:id/discord',async(req, res) => {
+
+  const adId = req.params.id
+
+  const ad = await prisma.ad.findUniqueOrThrow({
+    select: {
+      discord: true,
+    },
+    where:{
+      id: adId
+    }
+  })
+
+
+  return res.json({
+    discord: ad.discord
+  })
 })
 
 app.listen(3777)
