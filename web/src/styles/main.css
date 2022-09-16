@@ -6,3 +6,27 @@
 body{
   @apply bg-[#141412] bg-purpleGalaxy bg-cover bg-no-repeat h-screen
 }
+
+.form{
+  @apply mt-8 flex flex-col gap-4
+}
+
+.form label{
+  @apply font-semibold
+}
+
+.form input{
+  @apply text-sm bg-zinc-900 py-3 px-4 placeholder:text-zinc-500
+}
+
+.form div{
+  @apply flex flex-col gap-2
+}
+
+.form .div2{
+  @apply grid grid-cols-2 gap-2
+}
+
+.form .divRow{
+  @apply grid grid-cols-4
+}
