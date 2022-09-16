@@ -18,7 +18,8 @@ export function DubleTextInformation({ label, value, colorValue = THEME.COLORS.T
         {label}
       </Text>
 
-      <Text style={[styles.value , {color: colorValue}]}>
+      <Text style={[styles.value , {color: colorValue}]}
+      numberOfLines={1}>
         {value}
       </Text>
 

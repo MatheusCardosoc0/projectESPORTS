@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { THEME } from '../../theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -23,8 +24,26 @@ export const styles = StyleSheet.create({
   },
   cover:{
     width: 311,
-    height: 160,
+    height: 140,
     marginTop: 40,
     borderRadius: 10
+  },
+  containerList: {
+    width: '100%'
+  },
+  contentList: {
+    paddingLeft: 32,
+    paddingRight: 64,
+    alignItems: 'flex-start',
+  },
+  defaultContentList:{
+    color: THEME.COLORS.TEXT,
+    fontSize: THEME.FONT_SIZE.SM,
+    fontFamily: THEME.FONT_FAMILY.BOLD
+  },
+  emptyListContent: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
