@@ -16,7 +16,7 @@ interface Game {
   title: string
   bannerUrl: string
   _count: {
-    Ads: number
+    ads: number
   }
 }
 
@@ -59,7 +59,7 @@ function App() {
             <GameBanner key={game.id}
               image={game.bannerUrl}
               name={game.title}
-              adsCount={game._count.Ads}
+              adsCount={game._count.ads}
             ></GameBanner>
           )
         })}

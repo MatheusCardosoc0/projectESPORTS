@@ -44,13 +44,13 @@ export function CreateAdModal() {
     }
 
     try {
-      await axios.post(`http://localhost:3777/${data.game}/id/ads`, {
+      await axios.post(`http://localhost:3777/games/${data.game}/ads`, {
         name: data.name,
-        id: data.game,
+        yearsPlaying: Number(data.yearsPlaying),
+        discord: data.discord,
         weekDays: weekDays.map(Number),
         hourStart: data.hourStart,
-        hoursEnd: data.hoursEnd,
-        yearsPlaying: Number(data.yearsPlaying),
+        hourEnd: data.hourEnd,
         useVoiceChannel: useVoiceChannel
       })
       alert("Anúncio criado com sucesso")
@@ -131,10 +131,10 @@ export function CreateAdModal() {
 
             </div>
             <div >
-              <label htmlFor='hoursEnd'>Qual horario do dia?</label>
+              <label htmlFor='hourEnd'>Qual horario do dia?</label>
               <div className='div2'>
-                <input name='hourStart' id="hoursEnd" type={"time"} placeholder='até' />
-                <input name='hoursEnd' type={"time"} id="yearsPlaying" placeholder='de' />
+                <input name='hourStart' id="hourEnd" type={"time"} placeholder='até' />
+                <input name='hourEnd' type={"time"} id="yearsPlaying" placeholder='de' />
               </div>
 
             </div>
