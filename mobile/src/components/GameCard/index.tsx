@@ -10,7 +10,7 @@ export interface GameCardProps{
   title: string
   bannerUrl: string
   _count:{
-    Ads: number
+    ads: number
   }
   
 }
@@ -35,7 +35,7 @@ export function GameCard({ data, ...rest} : Props) {
           </Text>
 
           <Text style={styles.ads}>
-            {data._count.Ads} anúncios.
+            {data._count.ads} anúncios.
           </Text>
 
         </LinearGradient>

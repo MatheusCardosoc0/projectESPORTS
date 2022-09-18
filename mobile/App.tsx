@@ -1,3 +1,4 @@
+
 import {
   useFonts,
   Inter_400Regular,
@@ -10,8 +11,40 @@ import { Background } from './src/components/Background';
 import { Loading } from './src/components/Loading';
 import { Routes } from './src/routes';
 import { Home } from './src/screens/Home';
+import { Subscription } from 'expo-modules-core'
+import * as Notifications from 'expo-notifications'
+
+import './src/services/notificationConfigs'
+import { getPushNotificationToken } from './src/services/getPushNotification'
+import { useEffect, useRef } from 'react';
+
+//ExponentPushToken[8jMQdUOXOeEsQty4xydwQq]
 
 export default function App() {
+
+  const getNotificationListener = useRef<Subscription>()
+  const responseNotificationListener = useRef<Subscription>()
+
+  useEffect(() => {
+    getPushNotificationToken()
+  })
+
+  useEffect(() => {
+    getNotificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      console.log(notification)
+    });
+
+    responseNotificationListener.current = Notifications.addNotificationReceivedListener(response => {
+      console.log(response)
+    })
+
+    return () =>{
+      if(getNotificationListener.current && responseNotificationListener.current){
+        Notifications.removeNotificationSubscription(getNotificationListener.current)
+        Notifications.removeNotificationSubscription(getNotificationListener.current)
+      }
+    }
+  },[])
 
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -27,7 +60,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      {fontsLoaded? <Routes /> : <Loading />}
+      {fontsLoaded ? <Routes /> : <Loading />}
     </Background>
   );
 }
