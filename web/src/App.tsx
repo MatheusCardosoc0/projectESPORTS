@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ButtonWeekdays } from './components/ButtonWeekDays'
 import { CreateAdModal } from './components/CreateAdModal'
+import axios from 'axios'
 
 
 
@@ -24,10 +25,9 @@ function App() {
   const [games, setGames] = useState<Game[]>([])
 
   useEffect(() => {
-    fetch('http://localhost:3777/games')
-      .then(res => res.json())
-      .then(data => {
-        setGames(data)
+    axios('http://localhost:3777/games')
+      .then(response => {
+        setGames(response.data)
       })
   }, [])
 

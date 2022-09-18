@@ -36,11 +36,11 @@ app.post('/games/:id/ads',async (req, res) =>{
       name: body.name,
       yearsPlaying: body.yearsPlaying,
       discord: body.discord,
-      weekDays: body.weekDays,
+      weekDays: body.weekDays.join(','),
       hourStart: body.hourStart,
       hoursEnd: body.hoursEnd,
       useVoiceChannel: body.useVoiceChannel,
-      id: body.id
+      id: body.name
     }
   })
 
